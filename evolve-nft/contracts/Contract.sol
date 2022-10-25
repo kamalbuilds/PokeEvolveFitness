@@ -16,7 +16,7 @@ contract EvolvePokemon is ERC1155LazyMint {
         uint256 _quantity
     ) public view override {
         require(_tokenId ==0 ,"Only squiters are allowed");
-        require(_quantity ==1 ,"only 1 tortoise is claimable");
+        require(_qua ntity ==1 ,"only 1 tortoise is claimable");
     }
 
     function evolve () public{
