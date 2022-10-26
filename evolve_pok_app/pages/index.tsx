@@ -6,7 +6,7 @@ import styles from "../styles/Home.module.css";
 const Home: NextPage = () => {
   const {contract} = useContract("0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E"); // address of the contract 
   const address = useAddress();
-  console.log(address);
+  
   const { data: nfts , isLoading} = useOwnedNFTs(contract, address);
   
 
@@ -26,28 +26,30 @@ const Home: NextPage = () => {
         
 
         {nfts?.map((nft) => (
-          <div key={nft.metadata.description}>
-            {/* <img src={nft.image} alt={nft.name} /> */}
+          <div key={nft.metadata.id.toString()}>
+            
             <p>{nft.metadata.name}</p>
             
            {/* To show the NFT */}
            {!isLoading && nft ? (
-              <ThirdwebNftMedia metadata={nft.metadata} />
+              
+              <ThirdwebNftMedia metadata={nft.metadata} width="50%" />
             ) : (
               <p>Loading...</p>
             )} 
             <hr />
-            <Web3Button contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.erc1155.claim(0,1)} >
-              Claim a squirtel
-            </Web3Button>
             
-            <Web3Button 
-            accentColor="red" contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.call("evolve")} >
-              Evolve
-            </Web3Button>
           </div>
+          
         ))}
-
+        <Web3Button contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.erc1155.claim(0,1)} >
+          Claim a squirtel
+        </Web3Button>
+        <hr />
+        <Web3Button 
+        accentColor="red" contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.call("evolve")} >
+          Evolve
+        </Web3Button>
        
       </main>
     </div>
