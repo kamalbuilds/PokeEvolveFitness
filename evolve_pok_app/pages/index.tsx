@@ -1,12 +1,14 @@
-import { ConnectWallet, useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
+import { ConnectWallet, ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs, Web3Button } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
+
 
 const Home: NextPage = () => {
   const {contract} = useContract("0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E"); // address of the contract 
   const address = useAddress();
   console.log(address);
-  const { data: ownedNFTs } = useOwnedNFTs(contract, address);
+  const { data: nfts , isLoading} = useOwnedNFTs(contract, address);
+  
 
   return (
     <div className={styles.container}>
@@ -19,13 +21,32 @@ const Home: NextPage = () => {
         <div className={styles.connect}>
           <ConnectWallet accentColor="pink" />
         </div>
-        <hr />
+        <br />
         
-        {ownedNFTs?.map((nft)=>{
-          <h1 key={nft.metadata.id.toString()}>{nft}</h1>
-          console.log(nft.metadata.id)
-          
-        })}
+        
+
+        {nfts?.map((nft) => (
+          <div key={nft.metadata.description}>
+            {/* <img src={nft.image} alt={nft.name} /> */}
+            <p>{nft.metadata.name}</p>
+            
+           {/* To show the NFT */}
+           {!isLoading && nft ? (
+              <ThirdwebNftMedia metadata={nft.metadata} />
+            ) : (
+              <p>Loading...</p>
+            )} 
+            <hr />
+            <Web3Button contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.erc1155.claim(0,1)} >
+              Claim a squirtel
+            </Web3Button>
+            
+            <Web3Button 
+            accentColor="red" contractAddress="0x013f88b91054691d20Ce67FA8Ec8e6604B99e53E" action={(contract) => contract.call("evolve")} >
+              Evolve
+            </Web3Button>
+          </div>
+        ))}
 
        
       </main>
